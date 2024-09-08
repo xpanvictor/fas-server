@@ -13,8 +13,8 @@ export const register = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const login = catchAsync(async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  const user = await authService.loginUserWithEmailAndPassword(email, password);
+  const { studentMail, password } = req.body;
+  const user = await authService.loginUserWithEmailAndPassword(studentMail, password);
   const tokens = await tokenService.generateAuthTokens(user);
   res.send({ user, tokens });
 });
@@ -42,7 +42,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response) => {
 
 export const sendVerificationEmail = catchAsync(async (req: Request, res: Response) => {
   const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
-  await emailService.sendVerificationEmail(req.user.email, verifyEmailToken, req.user.name);
+  await emailService.sendVerificationEmail(req.user.studentMail, verifyEmailToken, req.user.name);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

@@ -3,9 +3,10 @@ import { password } from '../validate/custom.validation';
 import { NewRegisteredUser } from '../user/user.interfaces';
 
 const registerBody: Record<keyof NewRegisteredUser, any> = {
-  email: Joi.string().required().email(),
+  studentMail: Joi.string().required().email(),
   password: Joi.string().required().custom(password),
   name: Joi.string().required(),
+  matricNumber: Joi.string().required(),
 };
 
 export const register = {

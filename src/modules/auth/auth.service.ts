@@ -9,12 +9,12 @@ import { generateAuthTokens, verifyToken } from '../token/token.service';
 
 /**
  * Login with username and password
- * @param {string} email
+ * @param {string} studentMail
  * @param {string} password
  * @returns {Promise<IUserDoc>}
  */
-export const loginUserWithEmailAndPassword = async (email: string, password: string): Promise<IUserDoc> => {
-  const user = await getUserByEmail(email);
+export const loginUserWithEmailAndPassword = async (studentMail: string, password: string): Promise<IUserDoc> => {
+  const user = await getUserByEmail(studentMail);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
   }

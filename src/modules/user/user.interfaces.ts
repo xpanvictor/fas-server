@@ -9,7 +9,7 @@ export interface IUser {
   fingerprintTemplate: string;
   isEmailVerified: boolean;
   enrolledCourses: mongoose.Types.ObjectId[];
-  // password: string;
+  password: string;
 }
 
 export interface IUserDoc extends IUser, Document {
@@ -23,9 +23,9 @@ export interface IUserModel extends Model<IUserDoc> {
 
 export type UpdateUserBody = Partial<IUser>;
 
-export type NewRegisteredUser = Omit<IUser, 'isEmailVerified'>;
+export type NewRegisteredUser = Omit<IUser, 'isEmailVerified' | 'fingerprintTemplate' | 'enrolledCourses'>;
 
-export type NewCreatedUser = Omit<IUser, 'isEmailVerified'>;
+export type NewCreatedUser = Omit<IUser, 'isEmailVerified' | 'enrolledCourses'>;
 
 export interface IUserWithTokens {
   user: IUserDoc;

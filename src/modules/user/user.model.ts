@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
     },
     fingerprintTemplate: {
       type: String,
-      required: true,
+      // required: true,
     },
     enrolledCourses: [
       {
@@ -39,18 +39,18 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
         ref: 'Course',
       },
     ],
-    // password: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    //   minlength: 8,
-    //   validate(value: string) {
-    //     if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-    //       throw new Error('Password must contain at least one letter and one number');
-    //     }
-    //   },
-    //   private: true, // used by the toJSON plugin
-    // },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 8,
+      validate(value: string) {
+        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+          throw new Error('Password must contain at least one letter and one number');
+        }
+      },
+      private: true, // used by the toJSON plugin
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -86,13 +86,13 @@ userSchema.method('isPasswordMatch', async function (password: string): Promise<
   return bcrypt.compare(password, user.password);
 });
 
-// userSchema.pre('save', async function (next) {
-//   const user = this;
-//   if (user.isModified('password')) {
-//     user.password = await bcrypt.hash(user.password, 8);
-//   }
-//   next();
-// });
+userSchema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
+});
 
 const User = mongoose.model<IUserDoc, IUserModel>('User', userSchema);
 

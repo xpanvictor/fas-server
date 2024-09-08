@@ -9,3 +9,5 @@ export interface ILecturer {
 export interface ILecturerDoc extends ILecturer, Document {}
 
 export interface ILecturerModel extends Model<ILecturerDoc> {}
+
+export type NewCreatedLecturer = Omit<ILecturer, 'courses'>;
