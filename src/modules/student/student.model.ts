@@ -3,9 +3,9 @@ import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import toJSON from '../toJSON/toJSON';
 import paginate from '../paginate/paginate';
-import { IUserDoc, IUserModel } from './user.interfaces';
+import { IStudentDoc, IStudentModel } from './student.interfaces';
 
-const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
+const studentSchema = new mongoose.Schema<IStudentDoc, IStudentModel>(
   {
     name: {
       type: String,
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
       unique: true,
       lowercase: true,
     },
-    fingerprintTemplate: {
+    fingerprintTemplateId: {
       type: String,
       // required: true,
     },
@@ -62,31 +62,34 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
 );
 
 // add plugin that converts mongoose to json
-userSchema.plugin(toJSON);
-userSchema.plugin(paginate);
+studentSchema.plugin(toJSON);
+studentSchema.plugin(paginate);
 
 /**
  * Check if email is taken
- * @param {string} email - The user's email
- * @param {ObjectId} [excludeUserId] - The id of the user to be excluded
+ * @param {string} email - The student's email
+ * @param {ObjectId} [excludeUserId] - The id of the student to be excluded
  * @returns {Promise<boolean>}
  */
-userSchema.static('isEmailTaken', async function (studentMail: string, excludeUserId: mongoose.ObjectId): Promise<boolean> {
-  const user = await this.findOne({ studentMail, _id: { $ne: excludeUserId } });
-  return !!user;
-});
+studentSchema.static(
+  'isEmailTaken',
+  async function (studentMail: string, excludeStudentId: mongoose.ObjectId): Promise<boolean> {
+    const user = await this.findOne({ studentMail, _id: { $ne: excludeStudentId } });
+    return !!user;
+  }
+);
 
 /**
- * Check if password matches the user's password
+ * Check if password matches the student's password
  * @param {string} password
  * @returns {Promise<boolean>}
  */
-userSchema.method('isPasswordMatch', async function (password: string): Promise<boolean> {
+studentSchema.method('isPasswordMatch', async function (password: string): Promise<boolean> {
   const user = this;
   return bcrypt.compare(password, user.password);
 });
 
-userSchema.pre('save', async function (next) {
+studentSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
@@ -94,6 +97,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-const User = mongoose.model<IUserDoc, IUserModel>('User', userSchema);
+const Student = mongoose.model<IStudentDoc, IStudentModel>('Student', studentSchema);
 
-export default User;
+export default Student;

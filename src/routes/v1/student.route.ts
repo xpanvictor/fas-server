@@ -1,20 +1,20 @@
 import express, { Router } from 'express';
 import { validate } from '../../modules/validate';
 import { auth } from '../../modules/auth';
-import { userController, userValidation } from '../../modules/student';
+import { studentController, studentValidation } from '../../modules/student';
 
 const router: Router = express.Router();
 
 router
   .route('/')
-  .post(validate(userValidation.createUser), userController.createUser)
-  .get(auth(), validate(userValidation.getUsers), userController.getUsers);
+  .post(validate(studentValidation.createUser), studentController.createStudent)
+  .get(auth(), validate(studentValidation.getUsers), studentController.getUsers);
 
 router
   .route('/:userId')
-  .get(auth(), validate(userValidation.getUser), userController.getUser)
-  .patch(auth(), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth(), validate(userValidation.deleteUser), userController.deleteUser);
+  .get(auth(), validate(studentValidation.getUser), studentController.getUser)
+  .patch(auth(), validate(studentValidation.updateUser), studentController.updateUser)
+  .delete(auth(), validate(studentValidation.deleteUser), studentController.deleteUser);
 
 export default router;
 

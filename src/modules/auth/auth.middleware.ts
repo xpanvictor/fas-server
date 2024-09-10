@@ -3,7 +3,7 @@ import passport from 'passport';
 import httpStatus from 'http-status';
 import ApiError from '../errors/ApiError';
 // import { roleRights } from '../../config/roles';
-import { IUserDoc } from '../user/user.interfaces';
+import { IUserDoc } from '@/modules/student/student.interfaces';
 
 const verifyCallback =
   (
@@ -19,10 +19,10 @@ const verifyCallback =
     req.user = user;
 
     // if (requiredRights.length) {
-    // const userRights = roleRights.get(user.role);
+    // const userRights = roleRights.get(student.role);
     // if (!userRights) return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
     // const hasRequiredRights = requiredRights.every((requiredRight: string) => userRights.includes(requiredRight));
-    // if (!hasRequiredRights && req.params['userId'] !== user.id) {
+    // if (!hasRequiredRights && req.params['userId'] !== student.id) {
     // return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
     // }
     // }

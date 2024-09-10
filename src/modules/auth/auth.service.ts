@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import Token from '../token/token.model';
 import ApiError from '../errors/ApiError';
 import tokenTypes from '../token/token.types';
-import { getUserByEmail, getUserById, updateUserById } from '../user/user.service';
-import { IUserDoc, IUserWithTokens } from '../user/user.interfaces';
+import { getUserByEmail, getUserById, updateUserById } from '@/modules/student/student.service';
+import { IUserDoc, IUserWithTokens } from '@/modules/student/student.interfaces';
 import { generateAuthTokens, verifyToken } from '../token/token.service';
 
 /**

@@ -2,6 +2,8 @@ import express, { Router } from 'express';
 import authRoute from './auth.route';
 import docsRoute from './swagger.route';
 import userRoute from './user.route';
+import studentRoute from './student.route';
+import lecturerRoute from './lecturer.route';
 import config from '../../config/config';
 
 const router = express.Router();
@@ -11,13 +13,22 @@ interface IRoute {
   route: Router;
 }
 
+// Restructure the routing
 const defaultIRoute: IRoute[] = [
   {
     path: '/auth',
     route: authRoute,
   },
   {
-    path: '/users',
+    path: '/students',
+    route: studentRoute,
+  },
+  {
+    path: '/lecturers',
+    route: lecturerRoute,
+  },
+  {
+    path: '/fas',
     route: userRoute,
   },
 ];

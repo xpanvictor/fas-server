@@ -2,13 +2,23 @@ import httpStatus from 'http-status';
 import { Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import { tokenService } from '../token';
-import { userService } from '../user';
+import { studentService } from '../student';
 import * as authService from './auth.service';
 import { emailService } from '../email';
 
 export const register = catchAsync(async (req: Request, res: Response) => {
-  const user = await userService.registerUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
+  const { isStudent } = req.body;
+
+  if (isStudent) {
+    const user = await studentService.registerStudent(req.body);
+    const tokens = await tokenService.generateAuthTokens(user);
+
+    return res.status(httpStatus.CREATED).send({ user, tokens });
+  }
+
+  // Lecturer
+  const lecturer = await lecturerService.registerLecturer(req.body);
+  const tokens = await tokenService.generateAuthTokens(lecturer);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
 

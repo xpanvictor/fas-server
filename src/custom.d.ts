@@ -1,4 +1,4 @@
-import { IUserDoc } from './modules/user/user.interfaces';
+import { IUserDoc } from '@/modules/student/student.interfaces';
 
 declare module 'express-serve-static-core' {
   export interface Request {
