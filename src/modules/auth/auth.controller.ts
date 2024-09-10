@@ -5,6 +5,7 @@ import { tokenService } from '../token';
 import { studentService } from '../student';
 import * as authService from './auth.service';
 import { emailService } from '../email';
+import { lecturerService } from '../lecturer';
 
 export const register = catchAsync(async (req: Request, res: Response) => {
   const { isStudent } = req.body;
@@ -13,13 +14,14 @@ export const register = catchAsync(async (req: Request, res: Response) => {
     const user = await studentService.registerStudent(req.body);
     const tokens = await tokenService.generateAuthTokens(user);
 
-    return res.status(httpStatus.CREATED).send({ user, tokens });
+    res.status(httpStatus.CREATED).send({ user, tokens });
+    return;
   }
 
   // Lecturer
   const lecturer = await lecturerService.registerLecturer(req.body);
   const tokens = await tokenService.generateAuthTokens(lecturer);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  res.status(httpStatus.CREATED).send({ lecturer, tokens });
 });
 
 export const login = catchAsync(async (req: Request, res: Response) => {

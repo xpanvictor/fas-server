@@ -3,18 +3,24 @@ import mongoose from 'mongoose';
 import Token from '../token/token.model';
 import ApiError from '../errors/ApiError';
 import tokenTypes from '../token/token.types';
-import { getUserByEmail, getUserById, updateUserById } from '@/modules/student/student.service';
-import { IUserDoc, IUserWithTokens } from '@/modules/student/student.interfaces';
+import { getStudentByEmail, getStudentById, updateStudentById } from '../student/student.service';
+import { IStudentDoc, IStudentWithTokens } from '../student/student.interfaces';
 import { generateAuthTokens, verifyToken } from '../token/token.service';
+import { ILecturerDoc } from '../lecturer/lecturer.interfaces';
 
 /**
  * Login with username and password
  * @param {string} studentMail
  * @param {string} password
- * @returns {Promise<IUserDoc>}
+ * @param {boolean} isStudent
+ * @returns {Promise<IStudentDoc | ILecturerDoc>}
  */
-export const loginUserWithEmailAndPassword = async (studentMail: string, password: string): Promise<IUserDoc> => {
-  const user = await getUserByEmail(studentMail);
+export const loginUserWithEmailAndPassword = async (
+  studentMail: string,
+  password: string,
+  isStudent: boolean = true
+): Promise<IStudentDoc> => {
+  const user = isStudent ? await getStudentByEmail(studentMail) : null;
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
   }
@@ -37,12 +43,12 @@ export const logout = async (refreshToken: string): Promise<void> => {
 /**
  * Refresh auth tokens
  * @param {string} refreshToken
- * @returns {Promise<IUserWithTokens>}
+ * @returns {Promise<IStudentWithTokens>}
  */
-export const refreshAuth = async (refreshToken: string): Promise<IUserWithTokens> => {
+export const refreshAuth = async (refreshToken: string): Promise<IStudentWithTokens> => {
   try {
     const refreshTokenDoc = await verifyToken(refreshToken, tokenTypes.REFRESH);
-    const user = await getUserById(new mongoose.Types.ObjectId(refreshTokenDoc.user));
+    const user = await getStudentById(new mongoose.Types.ObjectId(refreshTokenDoc.user));
     if (!user) {
       throw new Error();
     }
@@ -63,11 +69,11 @@ export const refreshAuth = async (refreshToken: string): Promise<IUserWithTokens
 export const resetPassword = async (resetPasswordToken: any, newPassword: string): Promise<void> => {
   try {
     const resetPasswordTokenDoc = await verifyToken(resetPasswordToken, tokenTypes.RESET_PASSWORD);
-    const user = await getUserById(new mongoose.Types.ObjectId(resetPasswordTokenDoc.user));
+    const user = await getStudentById(new mongoose.Types.ObjectId(resetPasswordTokenDoc.user));
     if (!user) {
       throw new Error();
     }
-    await updateUserById(user.id, { password: newPassword });
+    await updateStudentById(user.id, { password: newPassword });
     await Token.deleteMany({ user: user.id, type: tokenTypes.RESET_PASSWORD });
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
@@ -77,17 +83,17 @@ export const resetPassword = async (resetPasswordToken: any, newPassword: string
 /**
  * Verify email
  * @param {string} verifyEmailToken
- * @returns {Promise<IUserDoc | null>}
+ * @returns {Promise<IStudentDoc | null>}
  */
-export const verifyEmail = async (verifyEmailToken: any): Promise<IUserDoc | null> => {
+export const verifyEmail = async (verifyEmailToken: any): Promise<IStudentDoc | ILecturerDoc | null> => {
   try {
     const verifyEmailTokenDoc = await verifyToken(verifyEmailToken, tokenTypes.VERIFY_EMAIL);
-    const user = await getUserById(new mongoose.Types.ObjectId(verifyEmailTokenDoc.user));
+    const user = await getStudentById(new mongoose.Types.ObjectId(verifyEmailTokenDoc.user));
     if (!user) {
       throw new Error();
     }
     await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
-    const updatedUser = await updateUserById(user.id, { isEmailVerified: true });
+    const updatedUser = await updateStudentById(user.id, { isEmailVerified: true });
     return updatedUser;
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Email verification failed');

@@ -1,18 +1,17 @@
 import express, { Router } from 'express';
 import { validate } from '../../modules/validate';
+import { lecturerController, lecturerValidation } from '@/modules/lecturer';
 import { auth } from '../../modules/auth';
-import { lecturerController, lecturerValidation } from '../../modules/lecturer';
+// import { auth } from '../../modules/auth';
+// import { lecturerController, lecturerValidation } from '../../modules/lecturer';
 
 const router: Router = express.Router();
 
-// router
-//   .route('/')
-//   .post(validate(userValidation.createUser), userController.createUser)
-//   .get(auth(), validate(userValidation.getUsers), userController.getUsers);
-//
-// router
-//   .route('/:userId')
-//   .get(auth(), validate(userValidation.getUser), userController.getUser)
+router.route('/').post(validate(lecturerValidation.createUser), lecturerController.createLecturer);
+// .get(auth(), validate(userValidation.getUsers), userController.getUsers);
+
+router.route('/me').get(auth(), lecturerController.getLecturer);
+router.route('/:userId').get(auth(), validate(lecturerValidation.getUser), lecturerController.getLecturer);
 //   .patch(auth(), validate(userValidation.updateUser), userController.updateUser)
 //   .delete(auth(), validate(userValidation.deleteUser), userController.deleteUser);
 

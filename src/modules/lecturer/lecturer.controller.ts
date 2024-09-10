@@ -1,8 +1,8 @@
 import httpStatus from 'http-status';
 import { Request, Response } from 'express';
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import catchAsync from '../utils/catchAsync';
-// import ApiError from '../errors/ApiError';
+import ApiError from '../errors/ApiError';
 // import pick from '../utils/pick';
 // import { IOptions } from '../paginate/paginate';
 import * as lecturerService from './lecturer.service';
@@ -20,15 +20,16 @@ export const createLecturer = catchAsync(async (req: Request, res: Response) => 
 //   res.send(result);
 // });
 //
-// export const getUser = catchAsync(async (req: Request, res: Response) => {
-//   if (typeof req.params['userId'] === 'string') {
-//     const user = await studentService.getStudentById(new mongoose.Types.ObjectId(req.params['userId']));
-//     if (!user) {
-//       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-//     }
-//     res.send(user);
-//   }
-// });
+export const getLecturer = catchAsync(async (req: Request, res: Response) => {
+  const userId = new mongoose.Types.ObjectId(typeof req.params['userId'] === 'string' ? req.params['userId'] : req.user);
+  if (userId) {
+    const user = await lecturerService.getLecturerById(userId);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    res.send(user);
+  }
+});
 //
 // export const updateUser = catchAsync(async (req: Request, res: Response) => {
 //   if (typeof req.params['userId'] === 'string') {

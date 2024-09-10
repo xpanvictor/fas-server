@@ -17,4 +17,6 @@ export interface ILecturerModel extends Model<ILecturerDoc> {
   paginate(filter: Record<string, any>, options: Record<string, any>): Promise<QueryResult>;
 }
 
+export type NewRegisteredLecturer = Omit<ILecturer, 'courses'>;
+
 export type NewCreatedLecturer = Omit<ILecturer, 'courses'>;

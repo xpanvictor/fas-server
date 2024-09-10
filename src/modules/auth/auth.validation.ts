@@ -1,12 +1,13 @@
 import Joi from 'joi';
 import { password } from '../validate/custom.validation';
-import { NewRegisteredUser } from '@/modules/student/student.interfaces';
+import { NewRegisteredStudent } from '@/modules/student/student.interfaces';
 
-const registerBody: Record<keyof NewRegisteredUser, any> = {
+const registerBody: Record<keyof NewRegisteredStudent, any> & { isStudent?: any } = {
   studentMail: Joi.string().required().email(),
   password: Joi.string().required().custom(password),
   name: Joi.string().required(),
   matricNumber: Joi.string().required(),
+  isStudent: Joi.boolean().default(true),
 };
 
 export const register = {

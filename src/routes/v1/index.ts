@@ -1,7 +1,6 @@
 import express, { Router } from 'express';
 import authRoute from './auth.route';
 import docsRoute from './swagger.route';
-import userRoute from './user.route';
 import studentRoute from './student.route';
 import lecturerRoute from './lecturer.route';
 import config from '../../config/config';
@@ -29,7 +28,7 @@ const defaultIRoute: IRoute[] = [
   },
   {
     path: '/fas',
-    route: userRoute,
+    route: lecturerRoute,
   },
 ];
 

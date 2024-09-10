@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { ILecturerDoc, ILecturerModel } from '@/modules/lecturer/lecturer.interfaces';
+import { ILecturerDoc, ILecturerModel } from './lecturer.interfaces';
 import paginate from '../paginate/paginate';
 import toJSON from '../toJSON/toJSON';
 
@@ -70,6 +70,6 @@ lecturerSchema.pre('save', async function (next) {
   next();
 });
 
-const Lecturer = mongoose.model('Lecturer', lecturerSchema);
+const Lecturer = mongoose.model<ILecturerDoc, ILecturerModel>('Lecturer', lecturerSchema);
 
 export default Lecturer;

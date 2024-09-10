@@ -10,6 +10,8 @@ router
   .post(validate(studentValidation.createUser), studentController.createStudent)
   .get(auth(), validate(studentValidation.getUsers), studentController.getUsers);
 
+router.route('/me').get(auth(), studentController.getUser);
+
 router
   .route('/:userId')
   .get(auth(), validate(studentValidation.getUser), studentController.getUser)

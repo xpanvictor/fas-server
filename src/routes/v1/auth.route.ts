@@ -1,9 +1,11 @@
 import express, { Router } from 'express';
 import { validate } from '../../modules/validate';
 import { authValidation, authController, auth } from '../../modules/auth';
+import { lecturerValidation } from '@/modules/lecturer';
 
 const router: Router = express.Router();
 
+router.post('/register/lecturer', validate(lecturerValidation.createUser), authController.register);
 router.post('/register', validate(authValidation.register), authController.register);
 router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);

@@ -2,8 +2,8 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Lecturer from './lecturer.model';
 import ApiError from '../errors/ApiError';
-import { IOptions, QueryResult } from '../paginate/paginate';
-import { ILecturerDoc, NewCreatedLecturer } from './lecturer.interfaces';
+// import { IOptions, QueryResult } from '../paginate/paginate';
+import { ILecturerDoc, NewCreatedLecturer, NewRegisteredLecturer } from './lecturer.interfaces';
 
 /**
  * Create a student
@@ -17,17 +17,17 @@ export const createLecturer = async (lecturerBody: NewCreatedLecturer): Promise<
   return Lecturer.create(lecturerBody);
 };
 
-// /**
-//  * Register a student
-//  * @param {NewRegisteredStudent} userBody
-//  * @returns {Promise<IStudentDoc>}
-//  */
-// export const registerStudent = async (userBody: NewRegisteredStudent): Promise<IStudentDoc> => {
-//   if (await Student.isEmailTaken(userBody.studentMail)) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-//   }
-//   return Student.create(userBody);
-// };
+/**
+ * Register a student
+ * @param {NewRegisteredLecturer} lecturerBody
+ * @returns {Promise<ILecturerDoc>}
+ */
+export const registerLecturer = async (lecturerBody: NewRegisteredLecturer): Promise<ILecturerDoc> => {
+  if (await Lecturer.isEmailTaken(lecturerBody.email)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  }
+  return Lecturer.create(lecturerBody);
+};
 //
 // /**
 //  * Query for users
@@ -45,7 +45,7 @@ export const createLecturer = async (lecturerBody: NewCreatedLecturer): Promise<
 //  * @param {mongoose.Types.ObjectId} id
 //  * @returns {Promise<IStudentDoc | null>}
 //  */
-export const getStudentById = async (id: mongoose.Types.ObjectId): Promise<IStudentDoc | null> => Student.findById(id);
+export const getLecturerById = async (id: mongoose.Types.ObjectId): Promise<ILecturerDoc | null> => Lecturer.findById(id);
 
 // /**
 //  * Get student by email

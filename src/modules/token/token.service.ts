@@ -8,6 +8,8 @@ import ApiError from '../errors/ApiError';
 import tokenTypes from './token.types';
 import { AccessAndRefreshTokens, ITokenDoc } from './token.interfaces';
 import { studentService } from '../student';
+import { IStudentDoc } from '@/modules/student/student.interfaces';
+import { ILecturerDoc } from '@/modules/lecturer/lecturer.interfaces';
 
 export interface IEntity {
   id: mongoose.Types.ObjectId;
@@ -90,7 +92,7 @@ export const verifyToken = async (token: string, type: string): Promise<ITokenDo
  * @param {IEntity} user
  * @returns {Promise<AccessAndRefreshTokens>}
  */
-export const generateAuthTokens = async (user: IEntity): Promise<AccessAndRefreshTokens> => {
+export const generateAuthTokens = async (user: IStudentDoc | ILecturerDoc): Promise<AccessAndRefreshTokens> => {
   const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
   const accessToken = generateToken(user.id, accessTokenExpires, tokenTypes.ACCESS);
 

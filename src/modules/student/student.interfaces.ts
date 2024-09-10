@@ -23,9 +23,9 @@ export interface IStudentModel extends Model<IStudentDoc> {
 
 export type UpdateStudentBody = Partial<IStudent>;
 
-export type NewRegisteredStudent = Omit<IStudent, 'isEmailVerified' | 'fingerprintTemplate' | 'enrolledCourses'>;
+export type NewRegisteredStudent = Omit<IStudent, 'isEmailVerified' | 'fingerprintTemplateId' | 'enrolledCourses'>;
 
-export type NewCreatedStudent = Omit<IStudent, 'isEmailVerified' | 'enrolledCourses'>;
+export type NewCreatedStudent = Omit<IStudent, 'isEmailVerified' | 'enrolledCourses' | 'fingerprintTemplateId'>;
 
 export interface IStudentWithTokens {
   user: IStudentDoc;
