@@ -4,6 +4,7 @@ import docsRoute from './swagger.route';
 import studentRoute from './student.route';
 import lecturerRoute from './lecturer.route';
 import config from '../../config/config';
+import courseRoute from '@/routes/v1/course.route';
 
 const router = express.Router();
 
@@ -25,6 +26,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: '/lecturers',
     route: lecturerRoute,
+  },
+  {
+    path: '/courses',
+    route: courseRoute,
   },
   {
     path: '/fas',

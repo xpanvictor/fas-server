@@ -8,6 +8,17 @@ export interface ICourse {
   classes: mongoose.Schema.Types.ObjectId[];
 }
 
-export interface ICourseDoc extends ICourse, Document {}
+export interface ICourseDoc extends ICourse, Document {
+  _id: mongoose.Types.ObjectId;
+}
 
 export interface ICourseModel extends Model<ICourseDoc> {}
+
+export type NewCreatedCourse = Omit<ICourse, 'students' | 'classes'>;
+
+export interface ICourseAttendanceAggr {
+  id: string;
+  name: string;
+  attendedClasses: number;
+  totalClasses: number;
+}
